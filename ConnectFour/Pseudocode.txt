@@ -1,0 +1,303 @@
+﻿Program Flow of Connect Four:
+	1. User can choose between human vs human OR human vs computer
+	2. Player with red pieces will always go first
+	3. Human player can generate move or drop a piece by clicking on column
+	5. Both players go alternately after a successful move
+	6. Pieces are only inside the 6x7 grid and player cannot drop piece on filled column
+	7. After each move, program will check if there is a winner
+	8. If there is no winner, continue the game
+	9. If all cells in the grid is filled, game ends in a draw
+
+We will have two boards:
+	1. GUI Board - representation of internal board in GUI
+	2. Internal Board - containing cell states
+
+We will have two types of players:
+	1. Human player - able to make a move by clicking on GUI Board
+	2. Computer player - generates move using AI engine 
+
+There are four ways to win:
+	1. Vertical win (|)
+	2. Horizontal win (-)
+	3. Top Left win (\)
+	4. Top Right win (/)
+	NOTE: If all cells are filled, game ends in a draw
+
+-----------------------------------------------------------------------------------------------------------------------------------
+For each valid move, we generate a new board with updated CellStates and update the GUI board
+
+public sealed Board.cs - internal representation of the board
+	Fields:
+		private readonly CellStates[,] cells
+		private readonly int emptyCellsNum
+		private int rowIndex
+		private int colIndex
+	Methods:
+		private Board()
+			- instantiates CellStates with empty cells
+		private Board(Board board, int EmptyCellsNum)
+			- updates cells based from passed in board
+			- this.rowIndex = 0
+			- this.colIndex = 0
+		public bool MakeMove(ActivePlayer player, int move, out Board board)
+			- return false if cell is occupied already, return the same board
+			- return true if valid move, return updated board
+			- this.rowIndex = i; this.colIndex = move;
+		public bool GetRowIndex()
+			- return this.rowIndex
+		public bool GetColIndex()
+			- return this.colIndex
+
+NOTE: For simplicity sake, red goes first. Computer player will always be yellow.
+public Game.cs - gets movement per turn, validates movement, checks for victory/draw
+	Fields:
+		private Board board
+		private Player currentPlayer
+	Properties:
+		public ActivePlayer ActivePlayerColor { get { return this.activePlayer.Color; } }
+        public Board Board { get { return board; } }
+		public GetColIndex
+			- return board.getColIndex()
+		public GetRowIndex
+			- return board.getRowIndex()
+	Methods:
+		private Game()
+			- instantiates game and empty board
+		public CreateGame(GameMode mode)
+			- if mode == OnePlayer : return new OnePlayerGame(GetLevel());
+			- if mode == TwoPlayer : return new TwoPlayerGame();
+		public int GetLevel(int level)
+			- gets difficulty level from user if in one player mode
+		public bool CheckVictory(ActivePlayer player, Board board)
+			- returns true if found four-in-a-row for player
+		public bool CheckDraw(Board board)
+			- returns true if all cells are occupied
+		private virtual activePlayer ChangeActivePlayer(ActivePlayer currentPlayer)
+			- changes currentPlayer between human, other human or computer
+		public virtual bool PlayTurn(ActivePlayer currentPlayer, int move)
+            - currentPlayer.RequestMove(board, move) : true
+			- return false;
+		
+private OnePlayerGame : Game
+	Fields:
+		public Player humanPlayer, computerPlayer
+	Methods:
+		public OnePlayerGame(DifficultyLevel level)
+			- computerPlayer = Player.CreateComputerPlayer(ActivePlayer.Yellow, difficultyLevel);
+            - humanPlayer = Player.CreateHumanPlayer(ActivePlayer.Red);
+			- currentPlayer = humanPlayer
+		public override PlayTurn(ActivePlayer currentPlayer, move)
+			- board.MakeMove(currentPlayer.Color, move, out board)
+			- returns true if valid move
+		public override ChangeActivePlayer()
+			- alternates between computerPlayer and humanPlayer
+
+private TwoPlayerGame : Game
+	Fields:
+		public Player redPlayer, yellowPlayer
+	Methods:
+		public TwoPlayerGame()
+			- redPlayer = Player.CreateHumanPlayer(ActivePlayer.Red);
+			- yellowPlayer = Player.CreateHumanPlayer(ActivePlayer.Yellow);
+			- currentPlayer = redPlayer
+		public override PlayTurn(ActivePlayer currentPlayer)
+			- board.MakeMove(currentPlayer.Color, move, out board)
+			- returns true if valid move
+		public override ChangeActivePlayer()
+			- alternates between redPlayer and yellowPlayer
+
+internal Player.cs - represents the human player and computer player
+	Fields:
+		private readonly ActivePlayer playerColor;
+	Methods:
+		private Player(ActivePlayer color)
+			- this.playerColor = color
+		public static Player CreateHumanPlayer(ActivePlayer color)
+            - return new HumanPlayer(color, iODevice);
+        public static Player CreateComputerPlayer(ActivePlayer color, DifficultyLevel difficultyLevel)
+            - return new ComputerPlayer(color, difficultyLevel, iODevice);
+		public virtual int RequestMove(Board board, int move)
+			- return -1 (default value)
+
+private ComputerPlayer() : Player
+	Fields:
+		private readonly AIEngine engine;
+	Methods:
+		public ComputerPlayer(difficultyLevel level)
+			- engine = new AIEngine(difficulty);
+		public override int RequestMove(Board board, int move)
+			- return engine.GetBestMove(board, playerColor);
+
+private HumanPlayer() : Player
+	Fields:
+	Methods:
+		public override int RequestMove(Board board, int move)
+			- return move
+
+public static BoardUtils.cs - contains constants, enums, etc.
+	Properties:
+		public static ROWS_NUM = 6
+		public static COLS_NUM = 7
+	Enums:
+		CellStates: Red, Yellow, Empty
+		ActivePlayer: Red, Yellow
+		DifficultyLevel: Easy, Medium, Hard
+		GameMode: OnePlayer, TwoPlayers
+
+AIEngine.cs - generates possible moves from board, scores each movement, returns move for computer player
+
+-----------------------------------------------------------------------------------------------------------------------------------
+More Detailed Program Flow:
+
+	Human vs Human
+		bool gameFlag = false;
+		bool turnFlag = false;
+
+		var game = Game.CreateGame(TwoPlayer) : return new TwoPlayerGame()
+		while (!gameFlag)
+		{
+			while (!gameFlag)
+			{
+				turnFlag = false;
+				int move = this.ClickColumn(Point mouse)
+				turnFlag = game.PlayTurn(redPlayer, move);
+				if (turnFlag)
+				{
+					Board board = game.board
+					columnIndex = game.GetColIndex()
+					rowIndex = game.GetRowIndex()
+					Graphics g = this.CreateGraphics();
+                    g.FillEllipse(Brushes.Red, BOARD_OFFSET + SQUARE_SIZE * columnIndex, BOARD_OFFSET + SQUARE_SIZE * rowIndex, CIRCLE_SIZE, CIRCLE_SIZE);
+					
+					if (game.CheckVictory(redPlayer, board))
+					{
+						// Winner is Red Player
+						gameFlag = true;
+					}
+					if (game.CheckDraw(game.board))
+					{
+						// No winner
+						gameFlag = true;
+					}
+
+					game.ChangeActivePlayer(redPlayer)
+					break;
+				}
+				if (!turnFlag)
+				{
+					// Invalid move
+					continue;
+				}
+			}
+
+			while (!gameFlag)
+			{
+				turnFlag = false;
+				int move = this.ClickColumn(Point mouse)
+				turnFlag = game.PlayTurn(yellowPlayer, move);
+				if (turnFlag)
+				{
+					Board board = game.board
+					columnIndex = game.GetColIndex()
+					rowIndex = game.GetRowIndex()
+					Graphics g = this.CreateGraphics();
+                    g.FillEllipse(Brushes.Yellow, BOARD_OFFSET + SQUARE_SIZE * columnIndex, BOARD_OFFSET + SQUARE_SIZE * rowIndex, CIRCLE_SIZE, CIRCLE_SIZE);
+
+					if (game.CheckVictory(yellowPlayer, board))
+					{
+						// Winner is Yellow Player
+						gameFlag = true;
+					}
+					if (game.CheckDraw(game.board))
+					{
+						// No winner
+						gameFlag = true;
+					}
+
+					game.ChangeActivePlayer(yellowPlayer)
+					break;
+				}
+				if (!turnFlag)
+				{
+					// Invalid move
+					continue;
+				}
+			}
+		}
+
+	Human vs Computer
+		bool gameFlag = false;
+		bool turnFlag = false;
+
+		var game = Game.CreateGame(OnePlayer) : return new OnePlayerGame(level)
+		while (!gameFlag)
+		{
+			while (!gameFlag)
+			{
+				turnFlag = false;
+				int move = this.ClickColumn(Point mouse)
+				turnFlag = game.PlayTurn(redPlayer, move);
+				if (turnFlag)
+				{
+					Board board = game.board
+					columnIndex = game.GetColIndex()
+					rowIndex = game.GetRowIndex()
+					Graphics g = this.CreateGraphics();
+                    g.FillEllipse(Brushes.Red, BOARD_OFFSET + SQUARE_SIZE * columnIndex, BOARD_OFFSET + SQUARE_SIZE * rowIndex, CIRCLE_SIZE, CIRCLE_SIZE);
+					
+					if (game.CheckVictory(redPlayer, board))
+					{
+						// Winner is Red Player
+						gameFlag = true;
+					}
+					if (game.CheckDraw(game.board))
+					{
+						// No winner
+						gameFlag = true;
+					}
+
+					game.ChangeActivePlayer(redPlayer)
+					break;
+				}
+				if (!turnFlag)
+				{
+					// Invalid move
+					continue;
+				}
+			}
+
+			while (!gameFlag)
+			{
+				turnFlag = false;
+				turnFlag = game.PlayTurn(yellowPlayer, move);
+				if (turnFlag)
+				{
+					Board board = game.board
+					columnIndex = game.GetColIndex()
+					rowIndex = game.GetRowIndex()
+					Graphics g = this.CreateGraphics();
+                    g.FillEllipse(Brushes.Red, BOARD_OFFSET + SQUARE_SIZE * columnIndex, BOARD_OFFSET + SQUARE_SIZE * rowIndex, CIRCLE_SIZE, CIRCLE_SIZE);
+					
+					if (game.CheckVictory(yellowPlayer, board))
+					{
+						// Winner is Red Player
+						gameFlag = true;
+					}
+					if (game.CheckDraw(game.board))
+					{
+						// No winner
+						gameFlag = true;
+					}
+
+					game.ChangeActivePlayer(yellowPlayer)
+					break;
+				}
+				if (!turnFlag)
+				{
+					// Invalid move
+					continue;
+				}
+			}
+
+		}
+

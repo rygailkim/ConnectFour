@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ConnectFour.Board">
+    <Position X="6.75" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAEAEgAQAAEACAAAAAgAAAABAAAAAAAI=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectFour.Game">
+    <Position X="4" Y="1.75" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ConnectFour.Game.OnePlayerGame" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Game.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ConnectFour.Game.TwoPlayerGame" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Game.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAgABAAQiCAAAAAAAAACAKAAACCACAAY=</HashCode>
+      <FileName>Game.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectFour.BoardUtils">
+    <Position X="11.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>GameUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectFour.Player">
+    <Position X="8" Y="5.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ConnectFour.Player.HumanPlayer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Player.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ConnectFour.Player.ComputerPlayer" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Player.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAgAAAAAAAAAAAEAAAAAgAAAAAA=</HashCode>
+      <FileName>Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectFour.AIEngine">
+    <Position X="15.5" Y="1" Width="1.5" />
+    <NestedTypes>
+      <Class Name="ConnectFour.AIEngine.Node" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AIEngine.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BAAAIAAAAAAAAAAEAEAAAAAIAAAAAAAAAAQAAAAAAAI=</HashCode>
+      <FileName>AIEngine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ConnectFour.Form1">
+    <Position X="1.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAgDAAAAAAAACIBAACAAAAAAIIgIAAAIAAAAA=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="ConnectFour.ActivePlayer">
+    <Position X="11.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameUtils.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ConnectFour.CellStates">
+    <Position X="13.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAIAAAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>GameUtils.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ConnectFour.GameMode">
+    <Position X="13.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAIA=</HashCode>
+      <FileName>GameUtils.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ConnectFour.DifficultyLevel">
+    <Position X="11.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAIAAAAAAAAAAEgAAA=</HashCode>
+      <FileName>GameUtils.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
